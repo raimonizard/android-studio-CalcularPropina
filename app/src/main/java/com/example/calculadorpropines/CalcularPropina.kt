@@ -14,8 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -59,6 +62,7 @@ fun Propina(modifier: Modifier = Modifier) {
     var percentatge: Int by remember { mutableStateOf(0) }
     var preuFinal: Float by remember { mutableStateOf(0.0f) }
     var propinaCambrers: Float by remember { mutableStateOf(0.0f) }
+    var stars: Int by remember { mutableStateOf(0) }
 
     Box(modifier, contentAlignment = Alignment.Center) {
         Column(
@@ -123,6 +127,24 @@ fun Propina(modifier: Modifier = Modifier) {
                         containerColor = Color.Green
                     )
                 ) { Text("+5%") }
+
+                Row(modifier = Modifier.padding(10.dp)) {
+                    when (percentatge) {
+                        in 1..5 -> stars = 1
+                        in 5..10 -> stars = 2
+                        in 10..15 -> stars = 3
+                        in 15..20 -> stars = 4
+                        in 25..100 -> stars = 5
+                        else -> stars = 0
+                    }
+                    for (i in 1..stars) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = "Icon Example",
+                            tint = Color.Yellow
+                        )
+                    }
+                }
             }
 
             Row {
@@ -169,7 +191,6 @@ fun Propina(modifier: Modifier = Modifier) {
                     .fillMaxWidth()
                     .padding(10.dp),
             )
-
         }
-    }
+        }
 }
