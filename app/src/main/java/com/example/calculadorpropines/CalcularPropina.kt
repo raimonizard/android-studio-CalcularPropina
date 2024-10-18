@@ -9,10 +9,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -32,7 +35,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -60,6 +62,7 @@ class CalcularPropina : ComponentActivity() {
  * @author Raimon Izard
  * @since 12/10/2024
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun Propina(modifier: Modifier = Modifier) {
@@ -238,19 +241,28 @@ fun Propina(modifier: Modifier = Modifier) {
                     propinaCambrers in 5.0f..15.0f -> coins = 2
                     propinaCambrers in 15.0f..30.0f -> coins = 3
                     propinaCambrers in 30.0f..40.0f -> coins = 4
-                    propinaCambrers > 40.0f -> coins = 5
+                    propinaCambrers in 40.0f..50.0f -> coins = 5
+                    propinaCambrers in 50.0f..60.0f -> coins = 6
+                    propinaCambrers in 60.0f..70.0f -> coins = 7
+                    propinaCambrers in 70.0f..80.0f -> coins = 8
+                    propinaCambrers > 80.0f -> coins = 9
                     else -> coins = 0
                 }
-                for (i in 1..coins) {
-                    Image(contentScale = ContentScale.None,
-                        painter = painterResource(id = R.drawable.euro_coin),
-                        contentDescription = "euro coin",
-                        alignment = Alignment.BottomCenter,
-                        modifier = Modifier
-                            .graphicsLayer {
-                                translationY = (coins - i) * 8f // Adjust
-                            }
-                    )
+                FlowRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight() // Adjust height as needed
+                        .padding(horizontal = 16.dp, vertical = 70.dp),
+                    horizontalArrangement = Arrangement.spacedBy(2.dp), // Espai entre monedes
+                    verticalArrangement = Arrangement.spacedBy(2.dp) // Espai entre files
+                ) {
+                    for (i in 1..coins) {
+                        Image(
+                            contentScale = ContentScale.None,
+                            painter = painterResource(id = R.drawable.euro_coin),
+                            contentDescription = "euro coin",
+                        )
+                    }
                 }
             }
         }
