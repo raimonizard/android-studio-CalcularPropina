@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +32,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -63,8 +68,27 @@ fun Propina(modifier: Modifier = Modifier) {
     var preuFinal: Float by remember { mutableStateOf(0.0f) }
     var propinaCambrers: Float by remember { mutableStateOf(0.0f) }
     var stars: Int by remember { mutableStateOf(0) }
+    var coins: Int by remember { mutableStateOf(0) }
 
-    Box(modifier, contentAlignment = Alignment.Center) {
+    // Definim el contenidor del fons de la imatge
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Image(
+            contentScale = ContentScale.FillBounds,
+            painter = painterResource(id = R.drawable.wooden_restaurant),
+            contentDescription = "Background restaurant",
+            modifier = Modifier
+                .fillMaxSize()
+                .matchParentSize()
+        )
+    }
+
+    Box(
+        modifier = Modifier
+            .padding(top = 50.dp), contentAlignment = Alignment.Center
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -74,11 +98,11 @@ fun Propina(modifier: Modifier = Modifier) {
                 )
         ) {
             Text(
-                "Benvingut/da al calculador de propines...",
+                "Benvingut/da al calculador de propines!",
                 modifier = Modifier
-                    .background(Color.Transparent)
+                    .background(Color.White.copy(alpha = 0.7f))
                     .fillMaxWidth()
-                    .padding(10.dp)
+                    .padding(10.dp), color = Color.Black
             )
 
             TextField(
@@ -170,27 +194,61 @@ fun Propina(modifier: Modifier = Modifier) {
                     elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
                 ) { Text("Calcular import") }
             }
-            Text(
-                //text = "El preu final a pagar és: ${preuFinal.toString()} €",
-                text = "La propina que rebrà el cambrer/a és de: ${
-                    String.format(
-                        "%.2f",
-                        propinaCambrers
+            Column(
+                modifier = Modifier
+                    .padding(top = 40.dp)
+            ) {
+                Text(
+                    //text = "El preu final a pagar és: ${preuFinal.toString()} €",
+                    text = "La propina que rebrà el cambrer/a és de: ${
+                        String.format(
+                            "%.2f",
+                            propinaCambrers
+                        )
+                    } €",
+                    modifier = Modifier
+                        .background(Color.White.copy(alpha = 0.7f))
+                        .fillMaxWidth()
+                        .padding(10.dp), color = Color.Black
+                )
+
+                Text(
+                    //text = "El preu final a pagar és: ${preuFinal.toString()} €",
+                    text = "El preu final a pagar és: ${String.format("%.2f", preuFinal)} €",
+                    modifier = Modifier
+                        .background(Color.White.copy(alpha = 0.7f))
+                        .fillMaxWidth()
+                        .padding(10.dp), color = Color.Black
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .padding(top = 0.dp)
+                    .fillMaxSize(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.Bottom
+            ) {
+                when {
+                    propinaCambrers in 0.5f..5.0f -> coins = 1
+                    propinaCambrers in 5.0f..15.0f -> coins = 2
+                    propinaCambrers in 15.0f..30.0f -> coins = 3
+                    propinaCambrers in 30.0f..40.0f -> coins = 4
+                    propinaCambrers > 40.0f -> coins = 5
+                    else -> coins = 0
+                }
+                for (i in 1..coins) {
+                    Image(contentScale = ContentScale.None,
+                        painter = painterResource(id = R.drawable.euro_coin),
+                        contentDescription = "euro coin",
+                        alignment = Alignment.BottomCenter,
+                        modifier = Modifier
+                            .graphicsLayer {
+                                translationY = (coins - i) * 8f // Adjust
+                            }
                     )
-                } €",
-                modifier = Modifier
-                    .background(Color.Transparent)
-                    .fillMaxWidth()
-                    .padding(10.dp),
-            )
-            Text(
-                //text = "El preu final a pagar és: ${preuFinal.toString()} €",
-                text = "El preu final a pagar és: ${String.format("%.2f", preuFinal)} €",
-                modifier = Modifier
-                    .background(Color.Transparent)
-                    .fillMaxWidth()
-                    .padding(10.dp),
-            )
+                }
+            }
         }
-        }
+    }
 }
