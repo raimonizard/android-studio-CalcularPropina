@@ -113,8 +113,11 @@ fun Propina(modifier: Modifier = Modifier) {
                 value = import.toString(),
                 onValueChange = { contingutTextField ->
                     import = contingutTextField.toFloatOrNull() ?: 0.0f
-                    if (import < 0.0f) import = 0.0f
+                    if (import < 0.0f) {
+                        import = 0.0f
+                    }
                     preuFinal = 0.0f
+                    propinaCambrers = 0.0f
                 },
                 label = { Text("Introdueix l'import del sopar...") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -131,6 +134,7 @@ fun Propina(modifier: Modifier = Modifier) {
                     if (percentatge > 100) percentatge = 100
                     else if (percentatge < 0) percentatge = 0
                     preuFinal = 0.0f
+                    propinaCambrers = 0.0f
                 },
                 label = { Text("Introdueix el percentatge de propina que vols deixar [0 - 100%]") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
